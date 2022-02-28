@@ -3,159 +3,146 @@
 /* Created on:     27/2/2022 0:50:05                            */
 /*==============================================================*/
 
-
+drop index MOTIVOS_CLASIFICACION_PK;
+drop table MOTIVOS_CLASIFICACION;
+drop index FK_PERSONAS_TELEFONOS;
+drop index FK_TELEFONO_FUENTE_DATOS;
+drop index TELEFONOS_PK;
+drop table TELEFONOS;
+drop index FK_PERSONA_FUENTE_DATOS;
+drop index PERSONAS_PK;
+drop table PERSONAS;
+drop index FK_TELEFONOS_TELEFONOS_CLASIFICADOS;
+drop index TELEFONOS_CLASIFICADOS_PK;
+drop table TELEFONOS_CLASIFICADOS;
 drop index FUENTES_DATOS_PK;
-
 drop table FUENTES_DATOS;
 
-drop index MOTIVOS_CLASIFICACION_PK;
-
-drop table MOTIVOS_CLASIFICACION;
-
-drop index RELATIONSHIP_1_FK;
-
-drop index PERSONAS_PK;
-
-drop table PERSONAS;
-
-drop index RELATIONSHIP_4_FK;
-
-drop index RELATIONSHIP_2_FK;
-
-drop index TELEFONOS_PK;
-
-drop table TELEFONOS;
-
-drop index RELATIONSHIP_3_FK;
-
-drop index TELEFONOS_CLASIFICADOS_PK;
-
-drop table TELEFONOS_CLASIFICADOS;
 
 /*==============================================================*/
 /* Table: FUENTES_DATOS                                         */
 /*==============================================================*/
-create table FUENTES_DATOS (
+create table if not exists FUENTES_DATOS (
    ID_FUENTE_DATOS      SERIAL               not null,
    FUENTE_DATOS         CHAR(50)             not null,
-   ROW_STATUS           VARCHAR(1)           not null,
-   ROW_DATE_REGISTERED  DATE                 not null,
+   ROW_STATUS           VARCHAR(1) DEFAULT '1' not null,
+   ROW_TIMESTAMP_REGISTERED  TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
    constraint PK_FUENTES_DATOS primary key (ID_FUENTE_DATOS)
 );
 
 /*==============================================================*/
 /* Index: FUENTES_DATOS_PK                                      */
 /*==============================================================*/
-create unique index FUENTES_DATOS_PK on FUENTES_DATOS (
+create unique index if not exists FUENTES_DATOS_PK on FUENTES_DATOS (
 ID_FUENTE_DATOS
 );
 
 /*==============================================================*/
 /* Table: MOTIVOS_CLASIFICACION                                 */
 /*==============================================================*/
-create table MOTIVOS_CLASIFICACION (
+create table if not exists MOTIVOS_CLASIFICACION (
    ID_MOTIVO_CLASIFICACION SERIAL               not null,
    CODIGO_MOTIVO        TEXT                 not null,
    MOTIVO               CHAR(50)             not null,
    CLASIFICACION        CHAR(2)              null,
-   ROW_STATUS           VARCHAR(1)           not null,
-   ROW_DATE_REGISTERED  DATE                 not null,
+   ROW_STATUS           VARCHAR(1) DEFAULT '1' not null,
+   ROW_TIMESTAMP_REGISTERED  TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
    constraint PK_MOTIVOS_CLASIFICACION primary key (ID_MOTIVO_CLASIFICACION)
 );
 
 /*==============================================================*/
 /* Index: MOTIVOS_CLASIFICACION_PK                              */
 /*==============================================================*/
-create unique index MOTIVOS_CLASIFICACION_PK on MOTIVOS_CLASIFICACION (
+create unique index if not exists MOTIVOS_CLASIFICACION_PK on MOTIVOS_CLASIFICACION (
 ID_MOTIVO_CLASIFICACION
 );
 
 /*==============================================================*/
 /* Table: PERSONAS                                              */
 /*==============================================================*/
-create table PERSONAS (
+create table if not exists PERSONAS (
    ID_PERSONA           SERIAL               not null,
    ID_FUENTE_DATOS      INT4                 not null,
    TIPO_IDENTIFICACION  VARCHAR(1)           not null,
    IDENTIFICACION       CHAR(20)             not null,
-   IDENTIFICACION_ULTIMO_DIGITO VARCHAR(1)           not null,
+   IDENTIFICACION_ULTIMO_DIGITO VARCHAR(1)   not null,
    NOMBRE_PERSONA       VARCHAR(200)         null,
-   ROW_STATUS           VARCHAR(1)           not null,
-   ROW_DATE_REGISTERED  DATE                 not null,
+   ROW_STATUS           VARCHAR(1) DEFAULT '1' not null,
+   ROW_TIMESTAMP_REGISTERED  TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
    constraint PK_PERSONAS primary key (ID_PERSONA)
 );
 
 /*==============================================================*/
 /* Index: PERSONAS_PK                                           */
 /*==============================================================*/
-create unique index PERSONAS_PK on PERSONAS (
+create unique index if not exists PERSONAS_PK on PERSONAS (
 ID_PERSONA
 );
 
 /*==============================================================*/
-/* Index: RELATIONSHIP_1_FK                                     */
+/* Index: FK_PERSONA_FUENTE_DATOS                                     */
 /*==============================================================*/
-create  index RELATIONSHIP_1_FK on PERSONAS (
+create  index if not exists FK_PERSONA_FUENTE_DATOS on PERSONAS (
 ID_FUENTE_DATOS
 );
 
 /*==============================================================*/
 /* Table: TELEFONOS                                             */
 /*==============================================================*/
-create table TELEFONOS (
+create table if not exists TELEFONOS (
    ID_TELEFONO          SERIAL               not null,
    ID_FUENTE_DATOS      INT4                 not null,
    ID_PERSONA           INT4                 null,
    TELEFONO             CHAR(20)             not null,
-   ROW_STATUS           VARCHAR(1)           not null,
-   ROW_DATE_REGISTERED  DATE                 not null,
+   ROW_STATUS           VARCHAR(1) DEFAULT '1' not null,
+   ROW_TIMESTAMP_REGISTERED  TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
    constraint PK_TELEFONOS primary key (ID_TELEFONO)
 );
 
 /*==============================================================*/
 /* Index: TELEFONOS_PK                                          */
 /*==============================================================*/
-create unique index TELEFONOS_PK on TELEFONOS (
+create unique index if not exists TELEFONOS_PK on TELEFONOS (
 ID_TELEFONO
 );
 
 /*==============================================================*/
-/* Index: RELATIONSHIP_2_FK                                     */
+/* Index: FK_TELEFONO_FUENTE_DATOS                                     */
 /*==============================================================*/
-create  index RELATIONSHIP_2_FK on TELEFONOS (
+create  index if not exists FK_TELEFONO_FUENTE_DATOS on TELEFONOS (
 ID_FUENTE_DATOS
 );
 
 /*==============================================================*/
-/* Index: RELATIONSHIP_4_FK                                     */
+/* Index: FK_PERSONAS_TELEFONOS                                 */
 /*==============================================================*/
-create  index RELATIONSHIP_4_FK on TELEFONOS (
+create  index if not exists FK_PERSONAS_TELEFONOS on TELEFONOS (
 ID_PERSONA
 );
 
 /*==============================================================*/
 /* Table: TELEFONOS_CLASIFICADOS                                */
 /*==============================================================*/
-create table TELEFONOS_CLASIFICADOS (
+create table if not exists TELEFONOS_CLASIFICADOS (
    ID_TELEFONO_CLASIFICADO SERIAL               not null,
    ID_TELEFONO          INT4                 not null,
    CLASIFICACION        VARCHAR(2)           not null,
-   ROW_STATUS           VARCHAR(1)           not null,
-   ROW_DATE_REGISTERED  DATE                 not null,
+   ROW_STATUS           VARCHAR(1) DEFAULT '1' not null,
+   ROW_TIMESTAMP_REGISTERED  TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null,
    constraint PK_TELEFONOS_CLASIFICADOS primary key (ID_TELEFONO_CLASIFICADO)
 );
 
 /*==============================================================*/
 /* Index: TELEFONOS_CLASIFICADOS_PK                             */
 /*==============================================================*/
-create unique index TELEFONOS_CLASIFICADOS_PK on TELEFONOS_CLASIFICADOS (
+create unique index if not exists TELEFONOS_CLASIFICADOS_PK on TELEFONOS_CLASIFICADOS (
 ID_TELEFONO_CLASIFICADO
 );
 
 /*==============================================================*/
-/* Index: RELATIONSHIP_3_FK                                     */
+/* Index: FK_TELEFONOS_TELEFONOS_CLASIFICADOS                   */
 /*==============================================================*/
-create  index RELATIONSHIP_3_FK on TELEFONOS_CLASIFICADOS (
+create  index if not exists FK_TELEFONOS_TELEFONOS_CLASIFICADOS on TELEFONOS_CLASIFICADOS (
 ID_TELEFONO
 );
 
