@@ -8,7 +8,8 @@ class DB_PgSQL implements DB_Interface {
     private $_CACHE;
     
     function __construct($framework_conn_name,$host,$user,$pass,$dbname,$port=5432) {
-        $conn_string='host='.$host.' user='.$user.' password='.$pass.' dbname='.$dbname.' port='.$port;
+        $conn_string = 'host='.$host.' user='.$user.' password='.$pass.' dbname='.$dbname.' port='.$port;
+        $conn_string = 'user='.$user.' password='.$pass.' dbname='.$dbname.' port='.$port;
         $this->conn = pg_connect($conn_string);
         if(!$this->conn) throw new Exception('Error al conectar a la base de datos');
         $this->inTransaction=false;

@@ -1,6 +1,6 @@
 <?php
 
-    error_reporting(E_ALL);
+    error_reporting(E_ERROR);
     require 'lib.php';
 
     // rutas del sistema 
@@ -8,11 +8,11 @@
     define('CLASS_PATH',BASE_SYS_PATH.'/classes');
 
     // credenciales ddb
-    define('DB_HOST','192.168.146.128');
-    define('DB_USER','main_source');
-    define('DB_PASS','123456');
-    define('DB_DATABASE','main_source');
-    
+    define('DB_PG_HOST','192.168.146.128');
+    define('DB_PG_USER','postgres');
+    define('DB_PG_PASS','postgres');
+    define('DB_PG_DBNAME','main_source');
+
     // auto carga de clases
     spl_autoload_register(function ($class) {
         // default loader
@@ -28,3 +28,19 @@
             include_once CLASS_PATH.'/'.$class.'.class.php';
         }
     },false);
+
+    // DB CONEXION
+    DB::connect(
+        'pgsql',
+        array(
+            'host'=>DB_PG_HOST,
+            'user'=>DB_PG_USER,
+            'pass'=>DB_PG_PASS,
+            'dbname'=>DB_PG_DBNAME,
+        )
+    );
+    
+    $db = DB::getInstance();
+    var_dump($db);
+
+    

@@ -7,6 +7,7 @@ class DB {
     }
     
     static function connect($db_type='pgsql',$params,$name='0') {
+
         switch($db_type) {
             case 'pgsql':
                 if(isset($params['pass'])) {
@@ -14,9 +15,9 @@ class DB {
                     unset($params['pass']);
                 }
                 if($params['port']!='') {
-                    $aux=new DB_PgSQL($name,$params['host'],$params['user'],$params['password'],$params['dbname'],$params['port']);
+                    $aux = new DB_PgSQL($name,$params['host'],$params['user'],$params['password'],$params['dbname'],$params['port']);
                 }else{
-                    $aux=new DB_PgSQL($name,$params['host'],$params['user'],$params['password'],$params['dbname']);
+                    $aux = new DB_PgSQL($name,$params['host'],$params['user'],$params['password'],$params['dbname']);
                 }
                 
             break;
